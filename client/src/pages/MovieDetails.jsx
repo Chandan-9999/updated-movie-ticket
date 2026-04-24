@@ -16,7 +16,8 @@ const MovieDetails = () => {
   const {id}=useParams()
   const [show,setShow]=useState(null)
 
-  const {shows,axios,getToken,user,fetchFavoriteMovies,favoriteMovies,image_base_url}=useAppContext()
+  const {shows,axios,getToken,user,fetchFavoriteMovies,favoriteMovies,image_base_url, detailedShows}=useAppContext()
+  const currency = import.meta.env.VITE_CURRENCY
 
   const getShow=async()=>{
     try {
@@ -28,6 +29,9 @@ const MovieDetails = () => {
       console.log(error)
     }
   }
+
+  const showForMovie = detailedShows?.find(s => (s.movie?._id || s.movie) === id);
+  const showPrice = showForMovie?.showPrice;
 
   const handleFavorite=async()=>{
     try {
@@ -69,7 +73,10 @@ const MovieDetails = () => {
           className='relative flex flex-col gap-3'>
           <BlurCircle top='-100px' left='-100px'/>
           <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 }}} className='text-primary'>ENGLISH</motion.p>
-          <motion.h1 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }}} className='text-4xl font-semibold max-w-96 text-balance'>{show.movie.title}</motion.h1>
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }}} className="flex items-center gap-4 flex-wrap">
+            <h1 className='text-4xl font-semibold max-w-96 text-balance'>{show.movie.title}</h1>
+            {showPrice && <span className="px-3 py-1 bg-primary/20 text-primary font-bold rounded-lg text-lg border border-primary/30">{currency}{showPrice}</span>}
+          </motion.div>
           <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 }}} className='flex items-center gap-2 text-gray-300'>
             <StarIcon className='w-5 h-5 text-primary fill-primary'/>
             {show.movie.vote_average.toFixed(1)} User Rating

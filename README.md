@@ -1,125 +1,96 @@
-# 🎬 QuickShow
+# QuickShow - Premium Movie Ticket Booking App
 
-**QuickShow** is a comprehensive, full-stack movie ticket booking application built using the MERN (MongoDB, Express, React, Node.js) stack. It provides a seamless and interactive experience for users to browse movies, select seats, and book tickets securely with integrated payment getaways and background email notifications. It also features a dedicated admin panel for managing movies, shows, and theater bookings.
+QuickShow is a modern, premium web application for browsing movies, booking tickets, and managing reservations. Built with the MERN stack (MongoDB, Express, React, Node.js), it features a stunning glassmorphism design, fluid animations, and a seamless user experience.
 
----
+## ✨ Features
 
-## ✨ Key Features
+- **Premium UI/UX:** Dark-mode glassmorphism aesthetic with Framer Motion animations.
+- **Dynamic Seat Selection:** Interactive cinema layout with a live floating price calculation bar.
+- **Payment Gateway Simulation:** Beautiful flipping 3D credit card and UPI QR code payment flows.
+- **Movie Browsing:** Integration with TMDB API for the latest movies, details, and ratings.
+- **User Dashboard:** "My Bookings" page with live countdown timers to showtimes and cancellation capabilities.
+- **Admin Portal:** Comprehensive dashboard to manage shows, set ticket prices, and view bookings.
+- **Smart Assistant:** Integrated AI Chatbot (Gemini) that has context of currently playing movies and your bookings.
+- **Authentication:** Secure user login and registration powered by Clerk.
 
-- **User Authentication:** Secure and seamless user signup, login, and profile management powered by **Clerk**.
-- **Interactive Seat Selection:** A dynamic UI allows users to view available, booked, and blocked seats for specific showtimes and logically select their preferred seats.
-- **Secure Payments:** Integrated **Stripe** checkout for real-time ticket payments.
-- **Automated Email Notifications:** Uses **Nodemailer** and **Inngest** for background jobs to send email confirmations for bookings, show reminders, and new movie notifications.
-- **Automated Seat Release:** Background jobs automatically cancel unpaid bookings and release seats if payment isn't completed within 10 minutes. 
-- **Admin Dashboard:** A protected admin portal to add new shows, list all available movies/shows, and view current bookings.
-- **Media Storage:** Uses **Cloudinary** for scalable and efficient movie poster and image hosting.
-
----
-
-## 🛠 Tech Stack
+## 🚀 Tech Stack
 
 ### Frontend
-- **Framework:** React 19 + Vite
-- **Styling:** Tailwind CSS 4
-- **Routing:** React Router DOM
-- **Authentication:** @clerk/clerk-react
-- **HTTP Client:** Axios
-- **Icons & UI:** Lucide React, react-hot-toast
+- **React.js** (Vite)
+- **Tailwind CSS** (Styling & Glassmorphism)
+- **Framer Motion** (Animations & Transitions)
+- **Lucide React** (Icons)
+- **React Router Dom** (Navigation)
+- **React Hot Toast** (Notifications)
 
 ### Backend
-- **Environment:** Node.js + Express.js
-- **Database:** MongoDB + Mongoose
-- **Authentication:** @clerk/express + Svix (for webhooks)
-- **Payments:** Stripe
-- **Background Jobs / Queues:** Inngest
-- **Email Service:** Nodemailer
-- **File Uploads:** Cloudinary
+- **Node.js & Express.js**
+- **MongoDB** (Mongoose)
+- **Inngest** (Background Jobs/Webhooks)
+- **Clerk SDK** (Authentication)
 
----
-
-## ⚙️ Local Setup Instructions
+## 🛠️ Getting Started
 
 ### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed on your machine. You will also need accounts for MongoDB, Clerk, Stripe, Cloudinary, and Inngest.
+- Node.js installed
+- MongoDB URI
+- Clerk API Keys
+- TMDB API Key
+- Gemini API Key
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/anvesh2257/QuickShow.git
-cd QuickShow
-```
+### Installation
 
-### 2. Install Dependencies
+1. Clone the repository
+   ```bash
+   git clone https://github.com/Chandan-9999/updated-movie-ticket.git
+   cd updated-movie-ticket
+   ```
 
-**For the Client:**
-```bash
-cd client
-npm install
-```
+2. Install Client Dependencies
+   ```bash
+   cd client
+   npm install
+   ```
 
-**For the Server:**
-```bash
-cd ../server
-npm install
-```
+3. Install Server Dependencies
+   ```bash
+   cd ../server
+   npm install
+   ```
 
-### 3. Environment Variables
-You will need to create a `.env` file in both the `client` and `server` directories.
+4. Set up Environment Variables
+   Create a `.env` file in the `server` directory and add your keys:
+   ```env
+   PORT=5000
+   MONGODB_URI=your_mongodb_uri
+   CLERK_SECRET_KEY=your_clerk_secret_key
+   TMDB_API_KEY=your_tmdb_api_key
+   GEMINI_API_KEY=your_gemini_api_key
+   ```
+   Create a `.env` file in the `client` directory:
+   ```env
+   VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+   VITE_BASE_URL=http://localhost:5000
+   VITE_CURRENCY=₹
+   ```
 
-**client/.env**
-```env
-VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-VITE_API_URL=http://localhost:5000 # Or your backend URL
-```
+5. Run the Application
+   Open two terminals:
+   
+   **Terminal 1 (Client):**
+   ```bash
+   cd client
+   npm run dev
+   ```
+   
+   **Terminal 2 (Server):**
+   ```bash
+   cd server
+   npm run server
+   ```
 
-**server/.env**
-```env
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-CLERK_SECRET_KEY=your_clerk_secret_key
-CLERK_WEBHOOK_SECRET=your_clerk_webhook_secret (from svix)
+## 📸 Screenshots
+*(Add screenshots of the Home Page, Seat Selection, Payment Gateway, and Admin Dashboard here)*
 
-STRIPE_SECRET_KEY=your_stripe_secret_key
-STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-
-CLOUDINARY_CLOUD_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-
-EMAIL_USER=your_email_address
-EMAIL_PASS=your_email_app_password
-
-INNGEST_EVENT_KEY=your_inngest_event_key
-INNGEST_SIGNING_KEY=your_inngest_signing_key
-```
-
-### 4. Running the Project
-
-**Run the Backend (Server):**
-Open a terminal and navigate to the `server` directory:
-```bash
-cd server
-npm run server
-```
-
-**Run the Frontend (Client):**
-Open a new terminal and navigate to the `client` directory:
-```bash
-cd client
-npm run dev
-```
-
-### 5. Running Inngest Locally
-To run Inngest background jobs (like emails and automated seat release) locally during development:
-```bash
-npx inngest-cli@latest dev
-```
-
-Your app will now be running at `http://localhost:5173`! 🍿
-
----
-
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome!
-
-## 📜 License
-This project is licensed under the ISC License.
+## 📄 License
+This project is licensed under the MIT License.

@@ -1,18 +1,37 @@
 import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useAppContext } from '../context/AppContext'
 
 const Loading = () => {
 
   const {nextUrl}=useParams()
   const navigate=useNavigate()
+  const [searchParams] = useSearchParams()
+  const sessionId = searchParams.get('session_id')
+  const { axios } = useAppContext()
 
   useEffect(()=>{
-    if(nextUrl){
-      setTimeout(()=>{
-        navigate('/'+nextUrl)
-      },8000)
+    const verifyAndNavigate = async () => {
+      if (sessionId) {
+        try {
+          await axios.post('/api/booking/verify-payment', { sessionId })
+        } catch (error) {
+          console.error(error)
+        }
+        if (nextUrl) {
+          navigate('/' + nextUrl)
+        }
+      } else {
+        if(nextUrl){
+          setTimeout(()=>{
+            navigate('/'+nextUrl)
+          }, 8000)
+        }
+      }
     }
+    
+    verifyAndNavigate()
   },[])
 
   return (

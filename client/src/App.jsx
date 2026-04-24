@@ -7,6 +7,10 @@ import MovieDetails from './pages/MovieDetails'
 import SeatLayout from './pages/SeatLayout'
 import MyBookings from './pages/MyBookings'
 import Favorite from './pages/Favorite'
+import ETicket from './pages/ETicket'
+import Theaters from './pages/Theaters'
+import TheatersSelection from './pages/TheatersSelection'
+import PaymentGateway from './pages/PaymentGateway'
 import {Toaster} from 'react-hot-toast'
 import Footer from './components/Footer'
 import Layout from './pages/admin/Layout'
@@ -46,8 +50,12 @@ const App = () => {
             <Route path='/' element={<PageWrapper><Home/></PageWrapper>}/>
             <Route path='/movies' element={<PageWrapper><Movies/></PageWrapper>}/>
             <Route path='/movies/:id' element={<PageWrapper><MovieDetails/></PageWrapper>}/>
-            <Route path='/movies/:id/:date' element={<PageWrapper><SeatLayout/></PageWrapper>}/>
+            <Route path='/movies/:id/:date' element={<PageWrapper><TheatersSelection/></PageWrapper>}/>
+            <Route path='/movies/:id/:date/seats' element={<PageWrapper><SeatLayout/></PageWrapper>}/>
+            <Route path='/payment' element={<PageWrapper><PaymentGateway/></PageWrapper>}/>
+            <Route path='/theaters' element={<PageWrapper><Theaters/></PageWrapper>}/>
             <Route path='/my-bookings' element={<PageWrapper><MyBookings/></PageWrapper>}/>
+            <Route path='/e-ticket' element={<PageWrapper><ETicket/></PageWrapper>}/>
             <Route path='/loading/:nextUrl' element={<PageWrapper><Loading/></PageWrapper>}/>
             <Route path='/favorite' element={<PageWrapper><Favorite/></PageWrapper>}/>
 

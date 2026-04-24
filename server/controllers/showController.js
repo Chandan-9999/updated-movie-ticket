@@ -61,7 +61,7 @@ export const addShow=async(req,res)=>{
         showsInput.forEach(show=>{
             const showDate=show.date;
             show.time.forEach((time)=>{
-                const dateTimeString=`${showDate}T${time}`
+                const dateTimeString=`${showDate}T${time}:00Z`
                 showsToCreate.push({
                     movie:movieId,
                     showDateTime:new Date(dateTimeString),
@@ -124,7 +124,7 @@ export const getShow=async(req,res)=>{
             if(!dateTime[date]){
                 dateTime[date]=[]
             }
-            dateTime[date].push({time:show.showDateTime,showId:show._id})
+            dateTime[date].push({time:show.showDateTime,showId:show._id,showPrice:show.showPrice})
 
         })
         res.json({success:true,movie,dateTime})

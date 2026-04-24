@@ -5,9 +5,11 @@ import { Menu, MenuIcon, SearchIcon, TicketPlus, User, XIcon } from "lucide-reac
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { useAppContext } from "../context/AppContext";
 import { motion } from "framer-motion";
+import SearchOverlay from "./SearchOverlay";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const {user} = useUser()
   const {openSignIn} = useClerk()
@@ -17,6 +19,7 @@ const Navbar = () => {
   const {favoriteMovies}=useAppContext()
 
   return (
+    <>
     <motion.div 
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -65,7 +68,7 @@ const Navbar = () => {
             onClick={() => {
               scrollTo(0, 0); setIsOpen(false);
             }}
-            to="/"
+            to="/theaters"
           >
             Theaters
           </Link>
@@ -97,7 +100,10 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-8">
-        <SearchIcon className="max-md:hidden w-6 h-6 cursor-pointer" />
+        <SearchIcon 
+          className="max-md:hidden w-6 h-6 cursor-pointer hover:text-primary transition-colors" 
+          onClick={() => setIsSearchOpen(true)}
+        />
           {
             !user ? (
                 <button onClick={openSignIn} className="px-4 py-1 sm:px-7 sm:py-2 bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer">
@@ -119,6 +125,9 @@ const Navbar = () => {
         onClick={() => setIsOpen(!isOpen)}
       />
     </motion.div>
+
+    <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    </>
   );
 };
 

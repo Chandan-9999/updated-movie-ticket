@@ -1,0 +1,371 @@
+/* ===== Seat Layout Page ===== */
+.seat-layout-page {
+  display: flex;
+  flex-direction: column;
+  padding: 100px 24px 140px;
+  min-height: 100vh;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .seat-layout-page {
+    flex-direction: row;
+    padding: 120px 40px 140px;
+    gap: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .seat-layout-page {
+    padding: 130px 80px 140px;
+    gap: 48px;
+  }
+}
+
+/* ===== Sidebar ===== */
+.seat-sidebar {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .seat-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 100px;
+    height: max-content;
+    margin-bottom: 0;
+  }
+}
+
+.seat-sidebar-inner {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 20px 0;
+}
+
+.seat-time-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.seat-time-slot:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.seat-time-slot.active {
+  background: linear-gradient(90deg, rgba(248, 69, 101, 0.15) 0%, transparent 100%);
+  color: #F84565;
+  border-left: 3px solid #F84565;
+}
+
+.seat-movie-info {
+  margin: 20px 16px 0;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+}
+
+/* ===== Main Content ===== */
+.seat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* ===== Screen ===== */
+.seat-screen-wrapper {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 28px;
+}
+
+.seat-screen {
+  position: relative;
+  height: 6px;
+  background: linear-gradient(90deg, transparent 0%, rgba(248, 69, 101, 0.5) 20%, rgba(248, 69, 101, 0.8) 50%, rgba(248, 69, 101, 0.5) 80%, transparent 100%);
+  border-radius: 50% / 100%;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.seat-screen-glow {
+  position: absolute;
+  inset: -20px -10px 0;
+  background: radial-gradient(ellipse at bottom, rgba(248, 69, 101, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ===== Legend ===== */
+.seat-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 28px;
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+}
+
+.seat-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.seat-legend-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.seat-legend-box.available {
+  border: 1.5px solid rgba(248, 69, 101, 0.4);
+  background: transparent;
+}
+
+.seat-legend-box.selected {
+  background: #F84565;
+  box-shadow: 0 0 8px rgba(248, 69, 101, 0.4);
+}
+
+.seat-legend-box.occupied {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ===== Seat Grid ===== */
+.seat-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.seat-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.seat-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.15);
+  margin-bottom: 8px;
+}
+
+.seat-section-rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.seat-aisle {
+  height: 20px;
+}
+
+/* ===== Seat Buttons ===== */
+.seat-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px 6px 8px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  position: relative;
+  transition: all 0.15s ease;
+  font-family: "Outfit", sans-serif;
+}
+
+.seat-btn .seat-label {
+  font-size: 9px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* Available */
+.seat-btn.available {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(248, 69, 101, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.seat-btn.available:hover {
+  border-color: rgba(248, 69, 101, 0.6);
+  background: rgba(248, 69, 101, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Selected */
+.seat-btn.selected {
+  background: linear-gradient(135deg, #F84565 0%, #D63854 100%);
+  border: 1.5px solid #F84565;
+  color: white;
+  box-shadow: 0 2px 10px rgba(248, 69, 101, 0.35);
+}
+
+/* Occupied */
+.seat-btn.occupied {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.15);
+  cursor: not-allowed;
+}
+
+/* ===== Seat Count Badge ===== */
+.seat-count-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 8px 16px;
+  background: rgba(248, 69, 101, 0.08);
+  border: 1px solid rgba(248, 69, 101, 0.15);
+  border-radius: 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== Floating Price Bar ===== */
+.seat-price-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 0 16px 16px;
+}
+
+.seat-price-bar-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 24px;
+  background: rgba(15, 15, 22, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 -4px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.seat-price-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.seat-price-seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.seat-price-chip {
+  padding: 3px 8px;
+  background: rgba(248, 69, 101, 0.12);
+  border: 1px solid rgba(248, 69, 101, 0.2);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #F84565;
+}
+
+.seat-price-calc {
+  font-size: 13px;
+}
+
+.seat-price-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.seat-price-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.seat-price-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #F84565 0%, #D63854 100%);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Outfit", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.seat-price-btn:hover {
+  box-shadow: 0 4px 24px rgba(248, 69, 101, 0.35);
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 640px) {
+  .seat-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .seat-btn .seat-label {
+    font-size: 8px;
+  }
+
+  .seat-legend {
+    gap: 14px;
+    padding: 8px 16px;
+  }
+
+  .seat-price-bar-inner {
+    flex-direction: column;
+    padding: 14px 18px;
+    gap: 12px;
+  }
+
+  .seat-price-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .seat-price-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+
+  .seat-price-seats {
+    max-width: 250px;
+  }
+}
