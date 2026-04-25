@@ -108,8 +108,9 @@ const MyBookings = () => {
 
   const isUpcoming = (dateStr) => new Date(dateStr).getTime() > Date.now()
 
-  const upcomingBookings = bookings.filter(b => isUpcoming(b.show?.showDateTime))
-  const pastBookings = bookings.filter(b => !isUpcoming(b.show?.showDateTime))
+  const validBookings = bookings.filter(b => b.show && b.show.movie)
+  const upcomingBookings = validBookings.filter(b => isUpcoming(b.show?.showDateTime))
+  const pastBookings = validBookings.filter(b => !isUpcoming(b.show?.showDateTime))
 
   useEffect(() => {
     if (user) {

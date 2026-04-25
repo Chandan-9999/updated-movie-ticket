@@ -10,6 +10,8 @@ const MovieCard = ({ movie }) => {
   const {image_base_url, detailedShows}=useAppContext()
   const currency = import.meta.env.VITE_CURRENCY
 
+  if (!movie) return null;
+
   const cardVariants = {
       hidden: { opacity: 0, scale: 0.8 },
       visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } }

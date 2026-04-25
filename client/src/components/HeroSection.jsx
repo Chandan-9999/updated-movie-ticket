@@ -16,7 +16,7 @@ const HeroSection = () => {
     const [progress, setProgress] = useState(0)
 
     // Use real shows if available, fallback to dummy data
-    const heroMovies = (shows && shows.length > 0 ? shows : dummyShowsData).slice(0, 5)
+    const heroMovies = (shows && shows.length > 0 ? shows.filter(s => s != null) : dummyShowsData).slice(0, 5)
 
     const goToSlide = useCallback((index) => {
         setDirection(index > currentIndex ? 1 : -1)

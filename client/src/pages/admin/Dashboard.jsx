@@ -94,7 +94,7 @@ const Dashboard = () => {
 
         <div className='relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
             <BlurCircle top='100px' left='-10%'/>
-            {dashboardData.activeShows?.map((show, index) => (
+            {dashboardData.activeShows?.filter(show => show.movie).map((show, index) => (
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}

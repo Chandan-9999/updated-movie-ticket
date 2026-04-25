@@ -96,10 +96,12 @@ export const addShow=async(req,res)=>{
 export const getShows=async(req,res)=>{
     try {
         const shows=await Show.find({showDateTime: {$gte:new Date()}}).populate('movie').sort({showDateTime:1});
+        // Filter out shows where the movie was deleted (populate returns null)
+        const validShows = shows.filter(show => show.movie != null);
         // filter unique shows
-        const uniqueShows=new Set(shows.map(show=>show.movie))
+        const uniqueShows=new Set(validShows.map(show=>show.movie))
 
-        res.json({success:true,shows:Array.from(uniqueShows), detailedShows: shows})
+        res.json({success:true,shows:Array.from(uniqueShows), detailedShows: validShows})
     } catch (error) {
         console.log(error);
         res.json({success:false,message:error.message})

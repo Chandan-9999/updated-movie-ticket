@@ -50,8 +50,11 @@ export const AppProvider=({children})=>{
         try{
             const {data}=await axios.get('/api/show/all')
             if(data.success){
-                setShows(data.shows)
-                setDetailedShows(data.detailedShows || [])
+                // Filter out null movie entries (can happen if a movie was deleted)
+                const validShows = (data.shows || []).filter(show => show != null)
+                const validDetailedShows = (data.detailedShows || []).filter(show => show && show.movie)
+                setShows(validShows)
+                setDetailedShows(validDetailedShows)
             }else{
                 toast.error(data.message)
             }
