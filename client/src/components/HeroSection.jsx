@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAppContext } from '../context/AppContext'
 import { dummyShowsData } from '../assets/assets'
 import timeFormat from '../lib/timeFormat'
+import { AnamorphicFlare, FilmGrain, Vignette, FocusBrackets, LightLeak, RatingBadge } from './CinematicEffects'
 
 const SLIDE_DURATION = 6000
 
@@ -14,27 +15,43 @@ const HeroSection = () => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [direction, setDirection] = useState(1)
     const [progress, setProgress] = useState(0)
+    const [isTransitioning, setIsTransitioning] = useState(false)
 
     // Use real shows if available, fallback to dummy data
     const heroMovies = (shows && shows.length > 0 ? shows.filter(s => s != null) : dummyShowsData).slice(0, 5)
 
+    const triggerTransition = useCallback((callback) => {
+        setIsTransitioning(true)
+        setTimeout(() => {
+            callback()
+            setTimeout(() => setIsTransitioning(false), 400)
+        }, 250)
+    }, [])
+
     const goToSlide = useCallback((index) => {
-        setDirection(index > currentIndex ? 1 : -1)
-        setCurrentIndex(index)
-        setProgress(0)
-    }, [currentIndex])
+        if (index === currentIndex) return
+        triggerTransition(() => {
+            setDirection(index > currentIndex ? 1 : -1)
+            setCurrentIndex(index)
+            setProgress(0)
+        })
+    }, [currentIndex, triggerTransition])
 
     const nextSlide = useCallback(() => {
-        setDirection(1)
-        setCurrentIndex((prev) => (prev + 1) % heroMovies.length)
-        setProgress(0)
-    }, [heroMovies.length])
+        triggerTransition(() => {
+            setDirection(1)
+            setCurrentIndex((prev) => (prev + 1) % heroMovies.length)
+            setProgress(0)
+        })
+    }, [heroMovies.length, triggerTransition])
 
     const prevSlide = useCallback(() => {
-        setDirection(-1)
-        setCurrentIndex((prev) => (prev - 1 + heroMovies.length) % heroMovies.length)
-        setProgress(0)
-    }, [heroMovies.length])
+        triggerTransition(() => {
+            setDirection(-1)
+            setCurrentIndex((prev) => (prev - 1 + heroMovies.length) % heroMovies.length)
+            setProgress(0)
+        })
+    }, [heroMovies.length, triggerTransition])
 
     // Auto-slide timer
     useEffect(() => {
@@ -98,10 +115,106 @@ const HeroSection = () => {
                 </motion.div>
             </AnimatePresence>
 
-            {/* Overlays */}
+            {/* ═══ CINEMATIC SWITCH EFFECT ═══ */}
+            {/* Flash burst on transition */}
+            <AnimatePresence>
+                {isTransitioning && (
+                    <motion.div
+                        className='absolute inset-0 z-30 pointer-events-none'
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        {/* White flash */}
+                        <motion.div
+                            className='absolute inset-0'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.15, 0] }}
+                            transition={{ duration: 0.5, times: [0, 0.3, 1] }}
+                            style={{ background: 'white' }}
+                        />
+
+                        {/* Film burn streaks */}
+                        <motion.div
+                            className='absolute inset-0'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0] }}
+                            transition={{ duration: 0.6, times: [0, 0.2, 1] }}
+                        >
+                            {/* Horizontal light streak */}
+                            <div className='absolute top-[45%] left-0 right-0 h-[3px]' style={{
+                                background: 'linear-gradient(90deg, transparent 0%, rgba(248,69,101,0.6) 30%, rgba(255,255,255,0.4) 50%, rgba(248,69,101,0.6) 70%, transparent 100%)',
+                                filter: 'blur(1px)',
+                            }} />
+                            {/* Wide glow behind the streak */}
+                            <div className='absolute top-[40%] left-0 right-0 h-[20%]' style={{
+                                background: 'linear-gradient(90deg, transparent 10%, rgba(248,69,101,0.08) 30%, rgba(255,255,255,0.05) 50%, rgba(248,69,101,0.08) 70%, transparent 90%)',
+                                filter: 'blur(15px)',
+                            }} />
+                        </motion.div>
+
+                        {/* Film grain burst */}
+                        <motion.div
+                            className='absolute inset-0'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.12, 0] }}
+                            transition={{ duration: 0.4 }}
+                            style={{
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+                                backgroundSize: '150px 150px',
+                                mixBlendMode: 'overlay',
+                            }}
+                        />
+
+                        {/* Sprocket hole flash (film strip edge) */}
+                        <motion.div
+                            className='absolute top-0 bottom-0 left-0 w-6'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.3, 0] }}
+                            transition={{ duration: 0.3 }}
+                            style={{
+                                background: 'linear-gradient(90deg, rgba(248,69,101,0.2), transparent)',
+                            }}
+                        />
+                        <motion.div
+                            className='absolute top-0 bottom-0 right-0 w-6'
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 0.3, 0] }}
+                            transition={{ duration: 0.3 }}
+                            style={{
+                                background: 'linear-gradient(-90deg, rgba(248,69,101,0.2), transparent)',
+                            }}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* ═══ CINEMATIC OVERLAYS ═══ */}
             <div className='absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent' />
             <div className='absolute inset-0 bg-gradient-to-t from-[#09090B] via-transparent to-black/40' />
             <div className='absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#09090B] to-transparent' />
+
+            {/* Cinematic film grain */}
+            <FilmGrain opacity={0.035} />
+            
+            {/* Vignette dark corners */}
+            <Vignette intensity={0.55} />
+
+            {/* Anamorphic lens flare */}
+            <AnamorphicFlare />
+
+            {/* Light leaks */}
+            <LightLeak />
+
+            {/* Camera focus brackets */}
+            <FocusBrackets />
+
+            {/* Scan line overlay */}
+            <div className='absolute inset-0 pointer-events-none' style={{
+              zIndex: 5,
+              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.015) 3px, rgba(0,0,0,0.015) 4px)',
+            }} />
 
             {/* Content */}
             <div className='relative z-10 flex flex-col justify-center h-full px-6 md:px-16 lg:px-36'>
@@ -114,7 +227,7 @@ const HeroSection = () => {
                         transition={{ duration: 0.5, ease: 'easeOut' }}
                         className='max-w-2xl'
                     >
-                        {/* Rating Badge */}
+                        {/* Rating Badge + Cinematic Rating */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -127,6 +240,7 @@ const HeroSection = () => {
                                     {movie.vote_average?.toFixed(1)}
                                 </span>
                             </div>
+                            <RatingBadge rating="PG-13" />
                             {movie.tagline && (
                                 <span className='text-sm text-gray-400 italic tracking-wide'>
                                     "{movie.tagline}"
@@ -140,6 +254,9 @@ const HeroSection = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.15, duration: 0.5 }}
                             className='text-4xl sm:text-5xl md:text-[64px] md:leading-[1.1] font-bold tracking-tight'
+                            style={{
+                              textShadow: '0 0 40px rgba(0,0,0,0.5), 0 0 80px rgba(0,0,0,0.3)',
+                            }}
                         >
                             {movie.title}
                         </motion.h1>

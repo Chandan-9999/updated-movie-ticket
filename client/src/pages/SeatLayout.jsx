@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import { assets } from '../assets/assets'
 import Loading from '../components/Loading'
-import {ArrowRightIcon, ClockIcon, Info} from 'lucide-react'
+import {ArrowRightIcon, ClockIcon, Info, Film, Ticket, Star} from 'lucide-react'
 import isoTimeFormat from '../lib/isoTimeFormat'
 import BlurCircle from '../components/BlurCircle'
 import {toast} from 'react-hot-toast'
 import { useAppContext } from '../context/AppContext'
 import { motion, AnimatePresence } from 'framer-motion'
+import { CeilingLights, WallSconce, TheaterCurtains, ProjectorBeam, ExitSign, AisleLights, TheaterFloor } from '../components/TheaterGraphics'
+import FloatingParticles from '../components/FloatingParticles'
 import './SeatLayout.css'
 
 const SeatLayout = () => {
@@ -23,7 +25,7 @@ const SeatLayout = () => {
   const navigate=useNavigate()
   const currency = import.meta.env.VITE_CURRENCY || '₹'
 
-  const {axios,getToken,user,detailedShows}=useAppContext()
+  const {axios,getToken,user,detailedShows,image_base_url}=useAppContext()
 
   const getShow=async()=>{
     try {
@@ -148,15 +150,47 @@ const SeatLayout = () => {
   return show ? (
     <div className='seat-layout-page'>
 
+      {/* ═══ Theater Ambiance Graphics ═══ */}
+      <TheaterCurtains />
+      <CeilingLights count={7} />
+      <WallSconce side='left' />
+      <WallSconce side='right' />
+      <ProjectorBeam />
+      <ExitSign side='left' />
+      <ExitSign side='right' />
+      <AisleLights />
+      <TheaterFloor />
+      <FloatingParticles count={8} />
+
       {/* Left Sidebar — Timings */}
       <motion.div 
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
         className='seat-sidebar'
+        style={{ zIndex: 10 }}
       >
         <div className='seat-sidebar-inner'>
-          <p className='text-base font-semibold px-5 mb-1'>Showtimes</p>
+          {/* Movie poster thumbnail */}
+          {show.movie && (
+            <div className='seat-sidebar-poster'>
+              <img 
+                src={`${image_base_url}${show.movie.backdrop_path || show.movie.poster_path}`}
+                alt={show.movie.title}
+                className='w-full h-28 object-cover rounded-t-2xl'
+              />
+              <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent rounded-t-2xl' />
+              {/* Rating badge */}
+              {show.movie.vote_average && (
+                <div className='absolute top-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded-full'>
+                  <Star className='w-3 h-3 text-primary fill-primary' />
+                  <span className='text-[10px] font-bold'>{show.movie.vote_average?.toFixed(1)}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          <p className='text-base font-semibold px-5 mt-3 mb-1'>Showtimes</p>
           <p className='text-xs text-gray-500 px-5 mb-4'>
             {new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
           </p>
@@ -177,14 +211,20 @@ const SeatLayout = () => {
           {/* Movie info mini card */}
           {show.movie && (
             <div className='seat-movie-info'>
-              <p className='text-sm font-semibold text-white truncate'>{show.movie.title}</p>
-              <p className='text-xs text-gray-500 mt-1'>
+              <div className='flex items-center gap-2 mb-2'>
+                <Film className='w-3.5 h-3.5 text-primary' />
+                <p className='text-sm font-semibold text-white truncate'>{show.movie.title}</p>
+              </div>
+              <p className='text-xs text-gray-500'>
                 {show.movie.genres?.slice(0, 2).map(g => g.name).join(' • ')}
               </p>
               {ticketPrice > 0 && (
-                <p className='text-xs text-primary font-semibold mt-2'>
-                  {currency}{ticketPrice} per ticket
-                </p>
+                <div className='flex items-center gap-1.5 mt-2'>
+                  <Ticket className='w-3 h-3 text-primary' />
+                  <p className='text-xs text-primary font-semibold'>
+                    {currency}{ticketPrice} per ticket
+                  </p>
+                </div>
               )}
             </div>
           )}
@@ -197,16 +237,34 @@ const SeatLayout = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
         className='seat-main'
+        style={{ zIndex: 10 }}
       >
         <BlurCircle top='-100px' left='-100px' />
 
-        <h1 className='text-xl font-bold text-center mb-6'>Select Your Seats</h1>
+        {/* Title with 3D effect */}
+        <motion.div 
+          className='text-center mb-6'
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <h1 className='text-xl font-bold seat-title-3d'>Select Your Seats</h1>
+          <p className='text-[11px] text-gray-500 mt-1'>Choose up to 5 seats for your experience</p>
+        </motion.div>
 
-        {/* Screen */}
-        <div className='seat-screen-wrapper'>
-          <div className='seat-screen'>
-            <div className='seat-screen-glow' />
-          </div>
+        {/* Screen - Enhanced 3D */}
+        <div className='seat-screen-wrapper perspective-[600px]'>
+          <motion.div
+            initial={{ rotateX: 30, opacity: 0 }}
+            animate={{ rotateX: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className='seat-screen'>
+              <div className='seat-screen-glow' />
+            </div>
+            {/* 3D Screen reflection */}
+            <div className='seat-screen-reflection' />
+          </motion.div>
           <p className='text-[10px] text-gray-500 uppercase tracking-[3px] mt-3 text-center'>
             Screen This Way
           </p>
@@ -232,13 +290,18 @@ const SeatLayout = () => {
         <div className='seat-grid'>
           {/* Premium rows A-B */}
           <div className='seat-section'>
-            <span className='seat-section-label'>Premium</span>
+            <span className='seat-section-label seat-label-premium'>
+              <Star className='w-3 h-3 inline mr-1' />
+              Premium
+            </span>
             <div className='seat-section-rows'>
               {groupRows[0].map(row => renderSeats(row))}
             </div>
           </div>
 
-          <div className='seat-aisle' />
+          <div className='seat-aisle'>
+            <div className='seat-aisle-line' />
+          </div>
 
           {/* Standard rows — left & right blocks */}
           <div className='seat-section'>
@@ -280,7 +343,15 @@ const SeatLayout = () => {
               <div className='seat-price-left'>
                 <div className='seat-price-seats'>
                   {selectedSeats.map(seat => (
-                    <span key={seat} className='seat-price-chip'>{seat}</span>
+                    <motion.span 
+                      key={seat} 
+                      className='seat-price-chip'
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 500 }}
+                    >
+                      {seat}
+                    </motion.span>
                   ))}
                 </div>
                 <div className='seat-price-calc'>

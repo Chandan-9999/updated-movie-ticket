@@ -5,6 +5,12 @@
   padding: 100px 24px 140px;
   min-height: 100vh;
   position: relative;
+  overflow: hidden;
+  /* Theater dark ambiance */
+  background: 
+    radial-gradient(ellipse at top center, rgba(248,69,101,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at bottom center, rgba(15,10,12,0.5) 0%, transparent 50%),
+    #09090B;
 }
 
 @media (min-width: 768px) {
@@ -43,7 +49,14 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px;
-  padding: 20px 0;
+  padding-bottom: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.seat-sidebar-poster {
+  position: relative;
+  overflow: hidden;
 }
 
 .seat-time-slot {
@@ -84,6 +97,13 @@
   position: relative;
 }
 
+/* ===== 3D Title ===== */
+.seat-title-3d {
+  text-shadow: 
+    0 0 20px rgba(248,69,101,0.15),
+    0 0 40px rgba(248,69,101,0.05);
+}
+
 /* ===== Screen ===== */
 .seat-screen-wrapper {
   width: 100%;
@@ -98,6 +118,10 @@
   border-radius: 50% / 100%;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  box-shadow: 
+    0 0 20px rgba(248,69,101,0.3),
+    0 0 60px rgba(248,69,101,0.1),
+    0 -5px 20px rgba(248,69,101,0.15);
 }
 
 .seat-screen-glow {
@@ -105,6 +129,16 @@
   inset: -20px -10px 0;
   background: radial-gradient(ellipse at bottom, rgba(248, 69, 101, 0.08) 0%, transparent 70%);
   pointer-events: none;
+}
+
+/* 3D Screen reflection */
+.seat-screen-reflection {
+  height: 30px;
+  margin-top: 2px;
+  background: linear-gradient(to bottom, rgba(248,69,101,0.06), transparent);
+  border-radius: 0 0 50% 50%;
+  filter: blur(4px);
+  opacity: 0.5;
 }
 
 /* ===== Legend ===== */
@@ -118,6 +152,7 @@
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 12px;
+  backdrop-filter: blur(5px);
 }
 
 .seat-legend-item {
@@ -132,6 +167,11 @@
   width: 20px;
   height: 20px;
   border-radius: 5px;
+  transition: transform 0.2s;
+}
+
+.seat-legend-item:hover .seat-legend-box {
+  transform: scale(1.15);
 }
 
 .seat-legend-box.available {
@@ -171,6 +211,16 @@
   letter-spacing: 2px;
   color: rgba(255, 255, 255, 0.15);
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.seat-label-premium {
+  color: rgba(248, 69, 101, 0.4);
+  padding: 2px 8px;
+  border: 1px solid rgba(248,69,101,0.15);
+  border-radius: 4px;
+  background: rgba(248,69,101,0.05);
 }
 
 .seat-section-rows {
@@ -181,6 +231,17 @@
 
 .seat-aisle {
   height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.seat-aisle-line {
+  width: 60%;
+  max-width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(248,69,101,0.1), transparent);
 }
 
 /* ===== Seat Buttons ===== */
@@ -215,6 +276,7 @@
   border-color: rgba(248, 69, 101, 0.6);
   background: rgba(248, 69, 101, 0.08);
   color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 10px rgba(248, 69, 101, 0.15);
 }
 
 /* Selected */
@@ -222,7 +284,23 @@
   background: linear-gradient(135deg, #F84565 0%, #D63854 100%);
   border: 1.5px solid #F84565;
   color: white;
-  box-shadow: 0 2px 10px rgba(248, 69, 101, 0.35);
+  box-shadow: 0 2px 10px rgba(248, 69, 101, 0.35), 0 0 20px rgba(248, 69, 101, 0.15);
+}
+
+/* Selected pulsing glow */
+.seat-btn.selected::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 8px 8px 10px 10px;
+  background: rgba(248, 69, 101, 0.2);
+  animation: seatPulse 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes seatPulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.15); opacity: 0; }
 }
 
 /* Occupied */
@@ -231,6 +309,15 @@
   border: 1.5px solid rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.15);
   cursor: not-allowed;
+}
+
+/* Occupied cross pattern */
+.seat-btn.occupied::before {
+  content: '×';
+  position: absolute;
+  font-size: 14px;
+  color: rgba(255,255,255,0.08);
+  font-weight: bold;
 }
 
 /* ===== Seat Count Badge ===== */
@@ -245,6 +332,7 @@
   border-radius: 10px;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(5px);
 }
 
 /* ===== Floating Price Bar ===== */
@@ -269,7 +357,10 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  box-shadow: 0 -4px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  box-shadow: 
+    0 -4px 40px rgba(0, 0, 0, 0.5), 
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 0 60px rgba(248, 69, 101, 0.05);
 }
 
 .seat-price-left {
@@ -327,6 +418,7 @@
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(248, 69, 101, 0.2);
 }
 
 .seat-price-btn:hover {
