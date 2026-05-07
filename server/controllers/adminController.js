@@ -11,7 +11,7 @@ export const isAdmin=async(req,res)=>{
 //API to get dashboard data
 export const getDashboardData=async(req,res)=>{
     try {
-        const bookings=await Booking.find({isPaid:true})
+        const bookings=await Booking.find({})
         const activeShows = (await Show.find({showDateTime:{$gte:new Date()}}).
         populate('movie')).filter(show => show.movie != null)
 
@@ -28,6 +28,34 @@ export const getDashboardData=async(req,res)=>{
     } catch (error) {
         console.error(error)
         res.json({success:false,message:error.message})
+    }
+}
+
+//API to get live stats (lightweight - for polling)
+export const getLiveStats=async(req,res)=>{
+    try {
+        const [bookingStats, activeShowCount, totalUser] = await Promise.all([
+            Booking.aggregate([
+                { $group: { _id: null, totalRevenue: { $sum: "$amount" }, totalBookings: { $sum: 1 } } }
+            ]),
+            Show.countDocuments({ showDateTime: { $gte: new Date() } }),
+            User.countDocuments()
+        ])
+
+        const stats = bookingStats[0] || { totalRevenue: 0, totalBookings: 0 }
+
+        res.json({
+            success: true,
+            stats: {
+                totalRevenue: stats.totalRevenue,
+                totalBookings: stats.totalBookings,
+                activeShowCount,
+                totalUser
+            }
+        })
+    } catch (error) {
+        console.error(error)
+        res.json({ success: false, message: error.message })
     }
 }
 

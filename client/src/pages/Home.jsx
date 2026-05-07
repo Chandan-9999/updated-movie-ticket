@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import StatsSection from '../components/StatsSection'
 import ExperienceBanner from '../components/ExperienceBanner'
 import { FloatingPosters3D, CinemaScreen3D, Ticket3D, PopcornBucket3D, FilmReel3D, FilmProjector3D } from '../components/Cinema3D'
+import ImmersiveViewing from '../components/ImmersiveViewing'
 import { Searchlights, CinemaMarquee, CinematicLetterbox } from '../components/CinematicEffects'
 
 const Home = () => {
@@ -127,19 +128,8 @@ const Home = () => {
       {/* Stats section */}
       <StatsSection />
 
-      {/* ─── 3D Cinema Screen ─── */}
-      <div className='relative py-16 overflow-hidden'>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className='text-center mb-8 relative z-10'
-        >
-          <p className='text-xs uppercase tracking-[4px] text-primary/60 mb-3'>Immersive Viewing</p>
-          <h2 className='text-2xl md:text-3xl font-bold'>The Big Screen Awaits</h2>
-        </motion.div>
-        <CinemaScreen3D />
-      </div>
+      {/* ─── Immersive Viewing with Posters ─── */}
+      <ImmersiveViewing />
 
       {/* Film strip divider */}
       <FilmStripDivider className='my-4' />
